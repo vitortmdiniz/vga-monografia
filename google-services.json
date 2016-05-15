@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "475645148270",
+    "project_id": "vgi-monografia"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:475645148270:android:c59790b283fd1e42",
+        "android_client_info": {
+          "package_name": "com.vitor.vgi_monografia"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "475645148270-luvhstl417tn1qt5u619el87ij5ovj5j.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.vitor.vgi_monografia",
+            "certificate_hash": "BADDF94C7A25E176375E828B5C782E63AB29E439"
+          }
+        },
+        {
+          "client_id": "475645148270-8jfmakqqdsofvpu4grbsbjj81rhk52qo.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCX95VNRLi4eHG_msrW70QxfqrupMtNULs"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
