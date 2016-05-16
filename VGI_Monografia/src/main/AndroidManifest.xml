@@ -40,18 +40,19 @@
 
         <activity
             android:name=".SignInActivity"
-            android:label="Logar">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            android:label="VGI-Monografia">
+
 
 
         </activity>
         <activity
             android:name=".MapsActivity"
-            android:label="VGI-Monografia"
+            android:label="Mapa"
             >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
 
 
         </activity>
