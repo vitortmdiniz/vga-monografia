@@ -23,6 +23,8 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -43,7 +45,7 @@ import org.json.JSONException;
 
 import java.util.List;
 
-public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMapClickListener, GoogleMap.OnMyLocationButtonClickListener, ActivityCompat.OnRequestPermissionsResultCallback {
+public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMapClickListener, GoogleMap.OnMyLocationButtonClickListener, View.OnClickListener, ActivityCompat.OnRequestPermissionsResultCallback {
 
     private GoogleMap mMap;
 
@@ -53,23 +55,30 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private EditText texto;
     private Button enviar;
     private Marker marker = null;
+    private String nome, email, id;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-       setContentView(R.layout.activity_maps);
-    dropdown = (Spinner)findViewById(R.id.spinner1);
-    String[] items = new String[]{"Escolha uma categoria:","Outros", "Crimes","Trânsito","Violência","Limpeza","Estrutura", "Transporte" };
-    ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, items);
-    dropdown.setAdapter(adapter);
-    texto = (EditText) findViewById(R.id.editText2);
-    enviar = (Button) findViewById(R.id.button2);
-    SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-            .findFragmentById(R.id.map);
-    mapFragment.getMapAsync(this);
-
-
-}
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            this.id  = extras.getString("id");
+            this.nome  = extras.getString("nome");
+            this.email  = extras.getString("email");
+        }
+        setContentView(R.layout.activity_maps);
+        dropdown = (Spinner)findViewById(R.id.spinner1);
+        String[] items = new String[]{"Escolha uma categoria:","Outros", "Crimes","Trânsito","Violência","Limpeza","Estrutura", "Transporte" };
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, items);
+        dropdown.setAdapter(adapter);
+        texto = (EditText) findViewById(R.id.editText2);
+        enviar = (Button) findViewById(R.id.button2);
+        enviar.setOnClickListener(this);
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
+    }
 
 
     /**
@@ -162,8 +171,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     public void onMapClick(LatLng point) {
-        if(marker != null)
+        if(marker != null) {
             marker.remove();
+            marker = null;
+        }
         texto.setVisibility(View.VISIBLE);
         dropdown.setVisibility(View.VISIBLE);
         enviar.setVisibility(View.VISIBLE);
@@ -173,5 +184,33 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 .title("O que está acontecendo neste local?"));
     }
 
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            if(marker != null)
+            {
+                texto.setVisibility(View.INVISIBLE);
+                dropdown.setVisibility(View.INVISIBLE);
+                enviar.setVisibility(View.INVISIBLE);
+                marker.remove();
+                marker = null;
+                return true;
+            }
+            else
+                return super.onKeyDown(keyCode, event);
+        }
+        return true;
 
+    }
+
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.button2:
+
+                break;
+
+        }
+    }
 }

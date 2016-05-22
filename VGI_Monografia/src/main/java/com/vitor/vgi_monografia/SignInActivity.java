@@ -132,7 +132,7 @@ public class SignInActivity extends AppCompatActivity implements
             mEmail = acct.getEmail();
             Intent i = new Intent(SignInActivity.this, MapsActivity.class);
             i.putExtra("id",mId);
-            i.putExtra("fullName",mFullName);
+            i.putExtra("nome",mFullName);
             i.putExtra("email",mEmail);
             startActivity(i);
             finish();
