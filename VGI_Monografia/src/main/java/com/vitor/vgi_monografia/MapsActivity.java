@@ -4,7 +4,9 @@ import android.Manifest;
 import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
+import android.location.Location;
 import android.net.Uri;
+import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import com.google.android.gms.appindexing.Action;
@@ -23,6 +25,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+
 
 import android.view.KeyEvent;
 import android.view.View;
@@ -43,6 +46,7 @@ import android.support.v7.app.AppCompatActivity;
 
 import org.json.JSONException;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMapClickListener, GoogleMap.OnMyLocationButtonClickListener, View.OnClickListener, ActivityCompat.OnRequestPermissionsResultCallback {
@@ -53,7 +57,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private boolean mPermissionDenied = false;
     private Spinner dropdown;
     private EditText texto;
-    private Button enviar;
+    private Button enviar, positivar, negativar;
     private Marker marker = null;
     private String nome, email, id;
 
@@ -74,10 +78,13 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         dropdown.setAdapter(adapter);
         texto = (EditText) findViewById(R.id.editText2);
         enviar = (Button) findViewById(R.id.button2);
+        positivar = (Button) findViewById(R.id.button3);
+        negativar = (Button) findViewById(R.id.button4);
         enviar.setOnClickListener(this);
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+        checkNotifications();
     }
 
 
@@ -104,7 +111,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             public View getInfoContents(final Marker marker) {
 
                 View v = getLayoutInflater().inflate(R.layout.info_window_layout, null);
-
+                texto.setVisibility(View.INVISIBLE);
+                dropdown.setVisibility(View.INVISIBLE);
+                enviar.setVisibility(View.INVISIBLE);
+                positivar.setVisibility(View.VISIBLE);
+                negativar.setVisibility(View.VISIBLE);
                 return v;
             }
 
@@ -178,17 +189,35 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         texto.setVisibility(View.VISIBLE);
         dropdown.setVisibility(View.VISIBLE);
         enviar.setVisibility(View.VISIBLE);
+        positivar.setVisibility(View.INVISIBLE);
+        negativar.setVisibility(View.INVISIBLE);
         mMap.animateCamera(CameraUpdateFactory.newLatLng(point));
         marker = mMap.addMarker(new MarkerOptions()
                 .position(point)
                 .title("O que está acontecendo neste local?"));
     }
 
+    public static void checkNotifications()
+    {
+        final Handler h = new Handler();
+        final int delay = 5000; //milliseconds
+
+        h.postDelayed(new Runnable(){
+            public void run(){
+                float[] results = new float[1];
+         /*       Location.distanceBetween(oldPosition.latitude, oldPosition.longitude,
+                        newPosition.latitude, newPosition.longitude, results);*/
+                h.postDelayed(this, delay);
+            }
+        }, delay);
+    }
+
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            if(marker != null)
-            {
+            positivar.setVisibility(View.INVISIBLE);
+            negativar.setVisibility(View.INVISIBLE);
+            if(marker != null) {
                 texto.setVisibility(View.INVISIBLE);
                 dropdown.setVisibility(View.INVISIBLE);
                 enviar.setVisibility(View.INVISIBLE);
@@ -208,9 +237,12 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.button2:
-
+                WebServiceRequests.sendPostRequest(this.id, this.nome,this.texto.getText().toString(),this.dropdown.getSelectedItem().toString(), String.valueOf(marker.getPosition().latitude), String.valueOf(marker.getPosition().longitude));
                 break;
 
         }
     }
+
+
+
 }

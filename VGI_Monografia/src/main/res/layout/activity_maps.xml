@@ -66,7 +66,31 @@
         android:layout_above="@+id/button2"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:visibility="invisible" />
+        android:visibility="invisible"
+        android:layout_alignRight="@+id/button4"
+        android:layout_alignEnd="@+id/button4" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Negativar Marcação"
+        android:id="@+id/button4"
+        android:background="#fc000d"
+        android:visibility="invisible"
+        android:layout_above="@+id/scrollView"
+        android:layout_alignRight="@+id/editText2"
+        android:layout_alignEnd="@+id/editText2" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Positivar Marcação"
+        android:id="@+id/button3"
+        android:background="#53fc0b"
+        android:visibility="invisible"
+        android:layout_alignTop="@+id/editText2"
+        android:layout_alignLeft="@+id/editText2"
+        android:layout_alignStart="@+id/editText2" />
 
 
 </RelativeLayout>

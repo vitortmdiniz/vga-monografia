@@ -2,6 +2,9 @@ package com.vitor.vgi_monografia;
 
 import android.os.AsyncTask;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -16,33 +19,38 @@ import cz.msebera.android.httpclient.client.ClientProtocolException;
 import cz.msebera.android.httpclient.client.HttpClient;
 import cz.msebera.android.httpclient.client.entity.UrlEncodedFormEntity;
 import cz.msebera.android.httpclient.client.methods.HttpPost;
+import cz.msebera.android.httpclient.entity.StringEntity;
 import cz.msebera.android.httpclient.impl.client.DefaultHttpClient;
 import cz.msebera.android.httpclient.message.BasicNameValuePair;
+import cz.msebera.android.httpclient.protocol.HTTP;
 
 
 public class WebServiceRequests {
-    private void sendPostRequest(String id,String mensagem, String categoria, String lat, String lon) {
+    public static void sendPostRequest(String id,String nome, String mensagem, String categoria, String lat, String lon) {
 
         class SendPostReqAsyncTask extends AsyncTask<String, Void, String> {
 
             @Override
             protected String doInBackground(String... params) {
                 String id = params[0];
-                String mensagem = params[1];
-                String categoria = params[2];
-                String lat = params[3];
-                String lon = params[4];
+                String nome = params[1];
+                String mensagem = params[2];
+                String categoria = params[3];
+                String lat = params[4];
+                String lon = params[5];
 
                 System.out.println("*** doInBackground ** id: "
-                        + id + "\n mensagem: " + mensagem + "\n categoria: " + categoria + "\n lat: " + lat + "\n lon" + lon);
+                        + id + "\n usuario: " + nome + "\n mensagem: "  + mensagem + "\n categoria: " + categoria + "\n lat: " + lat + "\n lon" + lon);
 
                 HttpClient httpClient = new DefaultHttpClient();
                 HttpPost httpPost = new HttpPost(
-                        "http://lib-dm.process9.com/libertydm/ValidateUserHandler.ashx");// replace with your url
+                        "http://10.0.2.2/vgi-monografia/web/marcacao/enviar-marcacao");// replace with your url
                 httpPost.addHeader("Content-type",
-                        "application/x-www-form-urlencoded");
-                BasicNameValuePair idBasicNameValuePair = new BasicNameValuePair(
+                        "application/json");
+      /*          BasicNameValuePair idBasicNameValuePair = new BasicNameValuePair(
                         "id", id);  // Make your own key value pair
+                BasicNameValuePair nomeBasicNameValuePair = new BasicNameValuePair(
+                        "nome", nome);  // Make your own key value pair
                 BasicNameValuePair mensagemBasicNameValuePair = new BasicNameValuePair(
                         "mensagem", mensagem);  // Make your own key value pair
                 BasicNameValuePair categoriaBasicNameValuePair = new BasicNameValuePair(
@@ -56,17 +64,28 @@ public class WebServiceRequests {
 
                 List<NameValuePair> nameValuePairList = new ArrayList<NameValuePair>();
                 nameValuePairList.add(idBasicNameValuePair);
+                nameValuePairList.add(nomeBasicNameValuePair);
                 nameValuePairList.add(mensagemBasicNameValuePair);
                 nameValuePairList.add(categoriaBasicNameValuePair);
                 nameValuePairList.add(latBasicNameValuePair);
                 nameValuePairList.add(lonBasicNameValuePair);
+*/
+                JSONObject data = new JSONObject();
+                try {
+                    data.put("id", id);
+                    data.put("nome", nome);
+                    data.put("mensagem", mensagem);
+                    data.put("categoria", categoria);
+                    data.put("lat", lat);
+                    data.put("lon", lon);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
 
                 try {
-                    UrlEncodedFormEntity urlEncodedFormEntity = new UrlEncodedFormEntity(
-                            nameValuePairList);
-                    httpPost.setEntity(urlEncodedFormEntity);
+                    StringEntity entity = new StringEntity(data.toString(), HTTP.UTF_8);
+                    httpPost.setEntity(entity);
 
-                    try {
                         HttpResponse httpResponse = httpClient
                                 .execute(httpPost);
                         InputStream inputStream = httpResponse.getEntity()
@@ -95,12 +114,12 @@ public class WebServiceRequests {
                         ioe.printStackTrace();
                     }
 
-                } catch (UnsupportedEncodingException uee) {
+              /*catch (UnsupportedEncodingException uee) {
                     System.out
                             .println("An Exception given because of UrlEncodedFormEntity argument :"
                                     + uee);
                     uee.printStackTrace();
-                }
+                }*/
                 return null;
             }
 
@@ -110,6 +129,6 @@ public class WebServiceRequests {
             }
         }
         SendPostReqAsyncTask sendPostReqAsyncTask = new SendPostReqAsyncTask();
-        sendPostReqAsyncTask.execute(id, mensagem,categoria, lat, lon);
+        sendPostReqAsyncTask.execute(id, nome, mensagem,categoria, lat, lon);
     }
 }

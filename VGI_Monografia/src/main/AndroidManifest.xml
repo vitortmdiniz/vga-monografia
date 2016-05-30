@@ -41,14 +41,6 @@
         <activity
             android:name=".SignInActivity"
             android:label="VGI-Monografia">
-
-
-
-        </activity>
-        <activity
-            android:name=".MapsActivity"
-            android:label="Mapa"
-            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -57,9 +49,13 @@
 
         </activity>
         <activity
-            android:name=".RegisterActivity"
-            android:label="Cadastrar"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:name=".MapsActivity"
+            android:label="Mapa"
+            >
+
+
+
+        </activity>
         <!--
              ATTENTION: This was auto-generated to add Google Play services to your project for
              App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information.
