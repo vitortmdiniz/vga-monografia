@@ -27,6 +27,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -61,7 +62,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private Marker marker = null;
     private String nome, email, id;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,7 +84,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-        checkNotifications();
+
     }
 
 
@@ -137,6 +137,26 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         } else if (mMap != null) {
             // Access to the location has been granted to the app.
             mMap.setMyLocationEnabled(true);
+            if (mMap != null) {
+
+
+                mMap.setOnMyLocationChangeListener(new GoogleMap.OnMyLocationChangeListener() {
+
+                    @Override
+                    public void onMyLocationChange(Location local_atual) {
+                        // TODO Auto-generated method stub
+                        float[] results = new float[1];
+                        if(marker != null) {
+                            Location.distanceBetween(marker.getPosition().latitude, marker.getPosition().longitude,
+                                    local_atual.getLatitude(), local_atual.getLongitude(), results);
+                            if (results[0] < 50) {
+                                Toast.makeText(getApplicationContext(), "Há uma marcação próxima de você!", Toast.LENGTH_LONG).show();
+                            }
+                        }
+                    }
+                });
+
+            }
         }
     }
 
@@ -197,20 +217,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 .title("O que está acontecendo neste local?"));
     }
 
-    public static void checkNotifications()
-    {
-        final Handler h = new Handler();
-        final int delay = 5000; //milliseconds
 
-        h.postDelayed(new Runnable(){
-            public void run(){
-                float[] results = new float[1];
-         /*       Location.distanceBetween(oldPosition.latitude, oldPosition.longitude,
-                        newPosition.latitude, newPosition.longitude, results);*/
-                h.postDelayed(this, delay);
-            }
-        }, delay);
-    }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
