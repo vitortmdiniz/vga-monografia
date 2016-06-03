@@ -6,7 +6,7 @@ android {
     buildToolsVersion "23.0.2"
     defaultConfig {
         applicationId "com.vitor.vgi_monografia"
-        minSdkVersion 10
+        minSdkVersion 16
         multiDexEnabled true
         targetSdkVersion 23
         versionCode 1
