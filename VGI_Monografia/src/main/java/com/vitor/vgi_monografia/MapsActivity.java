@@ -1,6 +1,7 @@
 package com.vitor.vgi_monografia;
 
 import android.Manifest;
+import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.TaskStackBuilder;
@@ -67,6 +68,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private Marker marker = null;
     private String nome, email, id;
     private int mId;
+    private Notification.Builder mBuilder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,12 +93,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-/*
-        NotificationCompat.Builder mBuilder =
-                new NotificationCompat.Builder(this)
-                        .setSmallIcon(R.drawable.mr_ic_play_dark)
-                        .setContentTitle("My notification")
-                        .setContentText("Hello World!");
+
+         mBuilder =
+                new Notification.Builder(this);
+
 // Creates an explicit intent for an Activity in your app
         Intent resultIntent = new Intent(this, MapsActivity.class);
 
@@ -115,11 +115,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                         PendingIntent.FLAG_UPDATE_CURRENT
                 );
         mBuilder.setContentIntent(resultPendingIntent);
-        NotificationManager mNotificationManager =
-                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-// mId allows you to update the notification later on.
-        mNotificationManager.notify(mId, mBuilder.build());
-*/
+
+
+
     }
 
 
@@ -185,7 +183,14 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                             Location.distanceBetween(marker.getPosition().latitude, marker.getPosition().longitude,
                                     local_atual.getLatitude(), local_atual.getLongitude(), results);
                             if (results[0] < 50) {
-                                Toast.makeText(getApplicationContext(), "Há uma marcação próxima de você!", Toast.LENGTH_LONG).show();
+                                mBuilder.setSmallIcon(R.drawable.cast_ic_notification_on);
+                                mBuilder.setContentTitle("VGI-Monografia");
+                                mBuilder.setContentText("Há uma marcação próxima de você!");
+                                mBuilder.setPriority(Notification.PRIORITY_HIGH);
+                                mBuilder.setVibrate(new long[]{1000, 1000, 1000, 1000, 1000});
+                                NotificationManager mNotificationManager=
+                                        (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                                mNotificationManager.notify(mId, mBuilder.build());
                             }
                         }
                     }
